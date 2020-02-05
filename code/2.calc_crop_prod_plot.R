@@ -1,5 +1,4 @@
-# energy calculation
-# crop yield data
+# calculate crop production
 library(fields)
 source('~/Desktop/analysis/code/get_geo.R')
 lat = seq(-90,90,2)

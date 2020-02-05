@@ -1,8 +1,8 @@
 # plots of harvest date
-source('~/Desktop/0828 debug/analysis/code/get_geo.R')
+source('~/Desktop/analysis/code/get_geo.R')
 #
-load('~/Desktop/0828 debug/analysis/data/crop/crop_mask.RData')
-setwd('~/Desktop/0828 debug/analysis/data/')
+load('~/Desktop/analysis/data/crop/crop_mask.RData')
+setwd('~/Desktop/analysis/data/')
 load('./dose/pod_dose.RData')
 
 # harvest dates for 4 crops
