@@ -7,6 +7,7 @@ lat = seq(-90,90,2)
 lon = seq(-180,177.5,2.5)
 
 expo.metrics = c('AOT40', 'POD3_DOSE', 'POD3_FBB', 'W126')
+unit_conver = c(3.65, 3.34, 4.46, 3.63) # 10^6 kcal ton-1
 
 # total food production energy
 for(i in 1:length(crop.types)){
@@ -20,7 +21,7 @@ for(j in 1:length(expo.metrics))
 load(paste0('~/Desktop/analysis/data/crop/ry/ry_', expo.metrics[j], '.RData'))
 # prod_crop_name, ton per grid cell
 # ry_crop_name
-unit_conver = c(3.65, 3.34, 4.46, 3.63) # 10^6 kcal ton-1
+#unit_conver = c(3.65, 3.34, 4.46, 3.63) # 10^6 kcal ton-1
 prod.loss.per = rep(0, 4)
 ener.loss = rep(0, 4)
 
@@ -87,29 +88,28 @@ p = ggplot(df_all, aes(x = crop.types, y = -el)) +
   facet_wrap(~method) +
   labs(x = ' ', y = 'Energy loss (^12 kcal)') #, title = "Global average"
   print(p)
-  # geom_point(aes(shape = method), size = 3.5, position = position_dodge(0.4)) +
-  # scale_shape_manual(values = c(4,7,10,16,17)) +
-  # theme(legend.title = element_blank()) +
-  # labs(x = ' ', y = 'Energy loss (^12 kcal)') + #, title = "Global average"
-  # print(p)
 
-# p = ggplot(df_all, aes(y = yield.loss.avg, x = method)) +
-#   geom_bar(stat='identity', fill = 'steelblue') +
-#   geom_text(aes(label=format(yield.loss.avg, digits = 1)), vjust=1.6, color="white", size=3.5) +
-#   facet_wrap(~crop.types) +
-#   labs(x = ' ', y = 'Yield loss (%)', title = "Global average")
-# print(p)
+for(i in 1:length(crop.types)){
+  L = df_all$crop.types == crop.types[i]
+  #print(df_all[L,]$pl)
+  mean_5_formatted = format(mean(df_all[L,]$pl), digits = 4)
+  print(paste(crop.types[i], 'mean (5 metrics)', mean_5_formatted))
+  
+  mean_4_formatted = format(mean(df_all[L,]$pl[c(1,2,4,5)]), digits = 4)
+  print(paste(crop.types[i], 'mean (4 metrics)', mean_4_formatted))
+}
+
+
+# mills = data.frame(crop.types = crop.types, method = 'Mills et al. 2018', pl = c(6.1, 7.1, 12.4, 4.4), el = rep(0,4))
+# df_all = rbind(df_all, mills)
 # 
-mills = data.frame(crop.types = crop.types, method = 'Mills et al. 2018', pl = c(6.1, 7.1, 12.4, 4.4), el = rep(0,4))
-df_all = rbind(df_all, mills)
-
-p = ggplot(df_all, aes(x = crop.types, y = pl, group = method)) + 
-  geom_point(aes(shape = method), size = 3.5, position = position_dodge(0.4)) +
-  scale_shape_manual(values = c(4,7,10,16,17,22)) +
-  theme(legend.title = element_blank()) +
-  labs(x = ' ', y = 'Production loss (%)') + #, title = "Global average"
-  geom_segment(aes(x = 'Maize', y = 2.2, xend = 'Maize', yend = 5.5, linetype = 'Ainsworth et al. 2017'), color = "blue") +
-  geom_segment(aes(x = 'Rice', y = 3, xend = 'Rice', yend = 4), color = "blue") +
-  geom_segment(aes(x = 'Soybean', y = 5.4, xend = 'Soybean', yend = 15.6), color = "blue") +
-  geom_segment(aes(x = 'Wheat', y = 3.9, xend = 'Wheat', yend = 15.4), color = "blue")
-print(p)
+# p = ggplot(df_all, aes(x = crop.types, y = pl, group = method)) + 
+#   geom_point(aes(shape = method), size = 3.5, position = position_dodge(0.4)) +
+#   scale_shape_manual(values = c(4,7,10,16,17,22)) +
+#   theme(legend.title = element_blank()) +
+#   labs(x = ' ', y = 'Production loss (%)') + #, title = "Global average"
+#   geom_segment(aes(x = 'Maize', y = 2.2, xend = 'Maize', yend = 5.5, linetype = 'Ainsworth et al. 2017'), color = "blue") +
+#   geom_segment(aes(x = 'Rice', y = 3, xend = 'Rice', yend = 4), color = "blue") +
+#   geom_segment(aes(x = 'Soybean', y = 5.4, xend = 'Soybean', yend = 15.6), color = "blue") +
+#   geom_segment(aes(x = 'Wheat', y = 3.9, xend = 'Wheat', yend = 15.4), color = "blue")
+# print(p)
