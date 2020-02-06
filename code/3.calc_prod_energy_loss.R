@@ -92,11 +92,15 @@ p = ggplot(df_all, aes(x = crop.types, y = -el)) +
 for(i in 1:length(crop.types)){
   L = df_all$crop.types == crop.types[i]
   #print(df_all[L,]$pl)
-  mean_5_formatted = format(mean(df_all[L,]$pl), digits = 4)
+  mean_5_formatted = format(mean(df_all[L,]$pl), digits = 3)
   print(paste(crop.types[i], 'mean (5 metrics)', mean_5_formatted))
+  sd_5_formatted = format(sd(df_all[L,]$pl), digits = 3)
+  print(paste(crop.types[i], 'sd (5 metrics)', sd_5_formatted))
   
-  mean_4_formatted = format(mean(df_all[L,]$pl[c(1,2,4,5)]), digits = 4)
+  mean_4_formatted = format(mean(df_all[L,]$pl[c(1,2,4,5)]), digits = 3)
   print(paste(crop.types[i], 'mean (4 metrics)', mean_4_formatted))
+  sd_4_formatted = format(sd(df_all[L,]$pl[c(1,2,4,5)]), digits = 3)
+  print(paste(crop.types[i], 'sd (4 metrics)', sd_4_formatted))
 }
 
 
