@@ -56,7 +56,7 @@ for(icrop in 1:length(crop.name)){
         after[ilon,ilat,icrop] = sum(subset[,,icrop], na.rm = T) # sum up the subset of data
     }
     print(paste('global total production', crop.name[icrop], 'after regriding:', sum(after[,,icrop], na.rm = T)))
-    #plot.field(after[,,i], lon, lat)
+    #plot.field(after[,,icrop], lon, lat)
 }
 prod_2degree = after
 
@@ -65,5 +65,5 @@ for(i in 1:4) assign(x = paste0('prod_', crop.types[i]), value = prod_2degree[,,
 # save data
 setwd('~/Desktop/analysis/data/crop')
 unit.info = 'crop.prod: ton/grid cell'
-save(list = c('prod_Maize', 'prod_Rice', 'prod_Soybean', 'prod_Wheat', 'crop.types', 'unit.info'), file = 'crop_prod.RData')
+save(list = c('prod_Maize', 'prod_Rice', 'prod_Soybean', 'prod_Wheat', 'crop.types', 'unit.info', 'lat', 'lon'), file = 'crop_prod.RData')
 

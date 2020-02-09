@@ -1,46 +1,41 @@
-# energy loss
+# calculate global crop production and energy loss
 library(fields); library(ggplot2)
 source('~/Desktop/analysis/code/get_geo.R')
 
 load('~/Desktop/analysis/data/crop/crop_prod.RData')
-lat = seq(-90,90,2)
-lon = seq(-180,177.5,2.5)
 
 expo.metrics = c('AOT40', 'POD3_DOSE', 'POD3_FBB', 'W126')
-unit_conver = c(3.65, 3.34, 4.46, 3.63) # 10^6 kcal ton-1
+unit_conver = c(3.65, 3.34, 4.46, 3.63) # 10^6 kcal ton-1, crop.types order
 
 # total food production energy
 for(i in 1:length(crop.types)){
   prod = get(paste0('prod_', crop.types[i])) # map: ton per grid cell
-  prod.total = sum(prod, na.rm = T)         # number: total yield (tons)
+  prod.total = sum(prod, na.rm = T)          # number: total yield (tons)
   print(paste(crop.types[i], 'total food prodcution energy (1e12 kcal)',prod.total*unit_conver[i]*1e-6))
 }
 
 for(j in 1:length(expo.metrics))
-{
-load(paste0('~/Desktop/analysis/data/crop/ry/ry_', expo.metrics[j], '.RData'))
-# prod_crop_name, ton per grid cell
-# ry_crop_name
-#unit_conver = c(3.65, 3.34, 4.46, 3.63) # 10^6 kcal ton-1
-prod.loss.per = rep(0, 4)
-ener.loss = rep(0, 4)
+  {
+  load(paste0('~/Desktop/analysis/data/crop/ry/ry_', expo.metrics[j], '.RData'))
+  prod.loss.per = rep(0, 4)
+  ener.loss = rep(0, 4)
 
-for(i in 1:length(crop.types)){
-  prod = get(paste0('prod_', crop.types[i])) # map: ton per grid cell
-  prod.total = sum(prod, na.rm = T)         # number: total yield (tons)
+  for(i in 1:length(crop.types)){ # calculate global production loss
+    prod = get(paste0('prod_', crop.types[i])) # map: ton per grid cell
+    prod.total = sum(prod, na.rm = T)         # number: total yield (tons)
 
-  prod_untact = prod / get(paste0('ry_', crop.types[i], '_', expo.metrics[j])) # map: theoretical production, unaffected by ozone
-  prod.theo = sum(prod_untact, na.rm = T) # number: theoretical total production
-  prod_loss = prod - prod_untact       # map: production loss (tons)
-  prod.loss = sum(prod_loss, na.rm = T) # number: total loss (tons)
-  plot.field(prod_loss, lon , lat, col = rev(tim.colors(n=32)[17:32]), type = 'def', zlim = c(-40000,0))
+    prod_untact = prod / get(paste0('ry_', crop.types[i], '_', expo.metrics[j])) # map: theoretical production, unaffected by ozone
+    prod.theo = sum(prod_untact, na.rm = T) # number: theoretical total production
+    prod_loss = prod - prod_untact       # map: production loss (tons)
+    prod.loss = sum(prod_loss, na.rm = T) # number: total loss (tons)
+    plot.field(prod_loss, lon , lat, col = rev(tim.colors(n=32)[17:32]), type = 'def', zlim = c(-40000,0))
   
-  print(paste(expo.metrics[j], crop.types[i], 'prod loss (%): ', 100*prod.loss/prod.theo))
+    print(paste(expo.metrics[j], crop.types[i], 'prod loss (%): ', 100*prod.loss/prod.theo))
   
-  prod.loss.per[i] = -100*prod.loss/prod.theo # number: prod loss (%)
-  ener.loss[i] = prod.loss * unit_conver[i]/(1e6) # energy loss(10e12kcal)
-}
-assign(x = paste0('df_',expo.metrics[j]), value = data.frame(crop.types, method = expo.metrics[j], pl = prod.loss.per, el = ener.loss))
+    prod.loss.per[i] = -100*prod.loss/prod.theo # number: prod loss (%)
+    ener.loss[i] = prod.loss * unit_conver[i]/(1e6) # energy loss(10e12kcal)
+  }
+  assign(x = paste0('df_',expo.metrics[j]), value = data.frame(crop.types, method = expo.metrics[j], pl = prod.loss.per, el = ener.loss))
 }
 
 # m7 and m12
@@ -89,9 +84,9 @@ p = ggplot(df_all, aes(x = crop.types, y = -el)) +
   labs(x = ' ', y = 'Energy loss (^12 kcal)') #, title = "Global average"
   print(p)
 
-for(i in 1:length(crop.types)){
+for(i in 1:length(crop.types)){ # calculate mean and sd of 5/4 metrics
   L = df_all$crop.types == crop.types[i]
-  #print(df_all[L,]$pl)
+
   mean_5_formatted = format(mean(df_all[L,]$pl), digits = 3)
   print(paste(crop.types[i], 'mean (5 metrics)', mean_5_formatted))
   sd_5_formatted = format(sd(df_all[L,]$pl), digits = 3)
@@ -104,16 +99,16 @@ for(i in 1:length(crop.types)){
 }
 
 
-# mills = data.frame(crop.types = crop.types, method = 'Mills et al. 2018', pl = c(6.1, 7.1, 12.4, 4.4), el = rep(0,4))
-# df_all = rbind(df_all, mills)
-# 
-# p = ggplot(df_all, aes(x = crop.types, y = pl, group = method)) + 
-#   geom_point(aes(shape = method), size = 3.5, position = position_dodge(0.4)) +
-#   scale_shape_manual(values = c(4,7,10,16,17,22)) +
-#   theme(legend.title = element_blank()) +
-#   labs(x = ' ', y = 'Production loss (%)') + #, title = "Global average"
-#   geom_segment(aes(x = 'Maize', y = 2.2, xend = 'Maize', yend = 5.5, linetype = 'Ainsworth et al. 2017'), color = "blue") +
-#   geom_segment(aes(x = 'Rice', y = 3, xend = 'Rice', yend = 4), color = "blue") +
-#   geom_segment(aes(x = 'Soybean', y = 5.4, xend = 'Soybean', yend = 15.6), color = "blue") +
-#   geom_segment(aes(x = 'Wheat', y = 3.9, xend = 'Wheat', yend = 15.4), color = "blue")
-# print(p)
+mills = data.frame(crop.types = crop.types, method = 'Mills et al. 2018', pl = c(6.1, 7.1, 12.4, 4.4), el = rep(0,4))
+df_all = rbind(df_all, mills)
+
+p = ggplot(df_all, aes(x = crop.types, y = pl, group = method)) +
+  geom_point(aes(shape = method), size = 3.5, position = position_dodge(0.4)) +
+  scale_shape_manual(values = c(4,7,10,16,17,22)) +
+  theme(legend.title = element_blank()) +
+  labs(x = ' ', y = 'Yield loss (%)') + #, title = "Global average"
+  geom_segment(aes(x = 'Maize', y = 2.2, xend = 'Maize', yend = 5.5, linetype = 'Ainsworth et al. 2017'), color = "blue") +
+  geom_segment(aes(x = 'Rice', y = 3, xend = 'Rice', yend = 4), color = "blue") +
+  geom_segment(aes(x = 'Soybean', y = 5.4, xend = 'Soybean', yend = 15.6), color = "blue") +
+  geom_segment(aes(x = 'Wheat', y = 3.9, xend = 'Wheat', yend = 15.4), color = "blue")
+print(p)
