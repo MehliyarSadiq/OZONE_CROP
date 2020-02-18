@@ -18,14 +18,14 @@ ry_Rice_AOT40 = 1 - 0.00415*AOT40_Rice
 
 setwd('~/Desktop/analysis/figures/RY/aot40')
 pdf(paste0('ry_legend_aot40.pdf'), width = 14, height = 8.5)
-plot.field(ry_Maize_AOT40, lon, lat, type = 'def', zlim = c(0.6,1), legend.only = T, col = rev(tim.colors(n=32)[17:32]))
+plot.field(ry_Maize_AOT40, lon, lat, type = 'def', zlim = c(0.8,1), legend.only = T, col = rev(tim.colors(n=32)[17:32]))
 dev.off()
 
 for(i in 1:4) {
   tmp = get(paste0('ry_', crop.types[i], '_AOT40')) * get(paste0('mask_', crop.types[i]))
   
   pdf(paste0('ry_', crop.types[i], '_aot40.pdf'), width = 14, height = 8.5)
-  plot.field(tmp[6:144,17:84], lon[6:144], lat[17:84], type = 'def', zlim = c(0.6,1), image.only = T, col = rev(tim.colors(n=32)[17:32]))
+  plot.field(tmp[6:144,17:84], lon[6:144], lat[17:84], type = 'def', zlim = c(0.8,1), image.only = T, col = rev(tim.colors(n=32)[17:32]))
   dev.off()
 }
 
@@ -50,14 +50,14 @@ group = c('ry_Maize_M12', 'ry_Wheat_M7', 'ry_Soybean_M12', 'ry_Rice_M7')
 setwd('~/Desktop/analysis/figures/RY/m7')
 
 pdf('m7_m12_legend.pdf', width = 14, height = 8.5)
-plot.field(ry_Maize_M12[6:144,17:84], lon[6:144], lat[17:84], type = 'def', zlim = c(0.6,1), legend.only = T, col = rev(tim.colors(n=32)[17:32]))
+plot.field(ry_Maize_M12[6:144,17:84], lon[6:144], lat[17:84], type = 'def', zlim = c(0.8,1), legend.only = T, col = rev(tim.colors(n=32)[17:32]))
 dev.off()
 
 for(i in 1:4){
   tmp = get(group[i]) * get(paste0('mask_', crop.types[i]))
   
   pdf(paste0(group[i], '.pdf'), width = 14, height = 8.5)
-  plot.field(tmp[6:144,17:84], lon[6:144], lat[17:84], type = 'def', zlim = c(0.6,1), image.only = T, col = rev(tim.colors(n=32)[17:32]))
+  plot.field(tmp[6:144,17:84], lon[6:144], lat[17:84], type = 'def', zlim = c(0.8,1), image.only = T, col = rev(tim.colors(n=32)[17:32]))
   dev.off()
 }
 
@@ -81,14 +81,14 @@ ry_Rice_W126 = W126_Rice*0 + 1
 setwd('~/Desktop/analysis/figures/RY/w126/')
 
 pdf(paste0('ry_legend_w126.pdf'), width = 14, height = 8.5)
-plot.field(ry_Maize_W126, lon, lat, type = 'def', zlim = c(0.85,1), legend.only = T, col = rev(tim.colors(n=32)[17:32]))
+plot.field(ry_Maize_W126, lon, lat, type = 'def', zlim = c(0.8,1), legend.only = T, col = rev(tim.colors(n=32)[17:32]))
 dev.off()
 
 for(i in 1:4) {
   tmp = get(paste0('ry_', crop.types[i], '_W126')) * get(paste0('mask_', crop.types[i]))
   
   pdf(paste0('ry_', crop.types[i], '_w126.pdf'), width = 14, height = 8.5)
-  plot.field(tmp[6:144,17:84], lon[6:144], lat[17:84], type = 'def', zlim = c(0.85,1), image.only = T, col = rev(tim.colors(n=32)[17:32]))
+  plot.field(tmp[6:144,17:84], lon[6:144], lat[17:84], type = 'def', zlim = c(0.8,1), image.only = T, col = rev(tim.colors(n=32)[17:32]))
   dev.off()
 }
 setwd('~/Desktop/analysis/data/crop/RY')
@@ -123,13 +123,13 @@ for(i in 1:4){
 setwd('~/Desktop/analysis/figures/RY/dose/')
 
 pdf(paste0('ry_legend_pod_dose.pdf'), width = 14, height = 8.5)
-plot.field(ry_Maize_POD3_DOSE, lon, lat, type = 'def', zlim = c(0.85,1), legend.only = T, col = rev(tim.colors(n=32)[17:32]))
+plot.field(ry_Maize_POD3_DOSE, lon, lat, type = 'def', zlim = c(0.8,1), legend.only = T, col = rev(tim.colors(n=32)[17:32]))
 dev.off()
 
 for(i in 1:4) {
   tmp = get(paste0('ry_', crop.types[i], '_POD3_DOSE')) * get(paste0('mask_', crop.types[i]))
   pdf(paste0('ry_', crop.types[i], '_pod_dose.pdf'), width = 14, height = 8.5)
-  plot.field(tmp[6:144,17:84], lon[6:144], lat[17:84], type = 'def', zlim = c(0.85,1), image.only = T, col = rev(tim.colors(n=32)[17:32]))
+  plot.field(tmp[6:144,17:84], lon[6:144], lat[17:84], type = 'def', zlim = c(0.8,1), image.only = T, col = rev(tim.colors(n=32)[17:32]))
   dev.off()
 }
 setwd('~/Desktop/analysis/data/crop/RY')
@@ -149,14 +149,14 @@ for(i in 1:4){
 setwd('~/Desktop/analysis/figures/RY/fbb/')
 
 pdf(paste0('ry_legend_pod_fbb.pdf'), width = 14, height = 8.5)
-plot.field(ry_Maize_POD3_FBB, lon, lat, type = 'def', zlim = c(0.85,1), legend.only = T, col = rev(tim.colors(n=32)[17:32]))
+plot.field(ry_Maize_POD3_FBB, lon, lat, type = 'def', zlim = c(0.8,1), legend.only = T, col = rev(tim.colors(n=32)[17:32]))
 dev.off()
 
 for(i in 1:4) {
   tmp = get(paste0('ry_', crop.types[i], '_POD3_FBB')) * get(paste0('mask_', crop.types[i]))
   
   pdf(paste0('ry_', crop.types[i], '_pod_fbb.pdf'), width = 14, height = 8.5)
-  plot.field(tmp[6:144,17:84], lon[6:144], lat[17:84], type = 'def', zlim = c(0.85,1), image.only = T, col = rev(tim.colors(n=32)[17:32]))
+  plot.field(tmp[6:144,17:84], lon[6:144], lat[17:84], type = 'def', zlim = c(0.8,1), image.only = T, col = rev(tim.colors(n=32)[17:32]))
   dev.off()
 }
 setwd('~/Desktop/analysis/data/crop/RY')
